@@ -1,10 +1,14 @@
-import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AllUsers from "./components/AllUsers";
+import React from "react";
 
 function App() {
   return (
-    <div className="text-2xl text-red-500">
-      Hello, world!
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AllUsers />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

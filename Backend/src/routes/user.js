@@ -5,13 +5,13 @@ const ConnectionRequest= require('../models/connectionRequest');
 const User=require('../models/user')
 
 
-const USER_SAFE_DATA = "firstName lastName age gender age skills about photoUrl";
+const USER_SAFE_DATA = "firstName age gender age skills about photoUrl";
 
 userRouter.get('/user/request/received', userAuth, async (req, res)=>{
    try{ const connectionRequests= await ConnectionRequest.find({
         toUserId:req.user._id,
         status:"interested"
-    }).populate("fromUserId", ["firstName", "lastName", "age", "gender", "skills", "about", "photoUrl"])
+    }).populate("fromUserId", ["name", "age", "gender", "skills", "about", "photoUrl"])
 
     res.json({data: connectionRequests})
 }
@@ -20,6 +20,32 @@ catch(err){
 
 }
 })
+
+userRouter.get('/user/requests', userAuth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Received requests (i.e., someone sent a request to this user)
+    const receivedRequests = await ConnectionRequest.find({
+      toUserId: userId
+    }).populate("fromUserId", ["name", "age", "gender", "skills", "about", "photoUrl"]);
+
+    // Sent requests (i.e., this user sent a request to someone)
+    const sentRequests = await ConnectionRequest.find({
+      fromUserId: userId
+    }).populate("toUserId", ["name", "age", "gender", "skills", "about", "photoUrl"]);
+
+    res.json({
+      received: receivedRequests,
+      sent: sentRequests
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching connection requests: " + err.message);
+  }
+});
+
 
 userRouter.get('/user/connections', userAuth, async(req, res)=>{
    
@@ -44,36 +70,40 @@ userRouter.get('/user/connections', userAuth, async(req, res)=>{
     }
 })
 
-userRouter.get('/user/feed', userAuth, async(req, res)=>{
-    try{
-        let limit= req.query.limit || 10;
-        limit= limit>50 ? 50:limit;
+userRouter.get('/user/feed', userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
 
-        const page= req.query.page || 1;
-        const skip= (page-1)*limit;
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [
+        { toUserId: loggedInUser._id },
+        { fromUserId: loggedInUser._id }
+      ]
+    }).select("toUserId fromUserId");
+
+    const notToDisplayInFeed = new Set();
+
+    connectionRequests.forEach((req) => {
+      notToDisplayInFeed.add(req.fromUserId.toString());
+      notToDisplayInFeed.add(req.toUserId.toString());
+    });
+
+    // ✅ Removed pagination — returns all filtered users
+    const feed = await User.find({
+      $and: [
+        { _id: { $nin: Array.from(notToDisplayInFeed) } },
+        { _id: { $ne: loggedInUser._id } }
+      ]
+    });
+
+    res.send(feed);
+  } catch (err) {
+    res.status(400).send("There is some error: " + err);
+  }
+});
 
 
-        const loggedInUser=req.user;
-        const connectionRequests=await ConnectionRequest.find({
-            $or:[{toUserId:loggedInUser._id}, {fromUserId:loggedInUser._id}]
-        }).select("toUserId fromUserId")
 
-        const notToDisplayInFeed= new Set();
-
-        connectionRequests.forEach((k)=> {
-            notToDisplayInFeed.add(k.fromUserId.toString())
-            notToDisplayInFeed.add(k.toUserId.toString())
-        });
-
-        const feed= await User.find({$and:[{ _id: {$nin:Array.from(notToDisplayInFeed)}}, {_id:{$ne:loggedInUser._id}}]}).limit(limit).skip(skip);
-
-        res.send(feed);
-
-    }
-    catch(err){
-        res.status(400).send("There is some err"+ err);
-    }
-})
 
 
 // GET all users

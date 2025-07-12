@@ -27,7 +27,7 @@ const Requests = () => {
 
     const fetchRequests=async ()=>{
         try{
-            const res= await axios.get(BASE_URL + "/user/request/received", {withCredentials:true});
+            const res= await axios.get(BASE_URL + "/user/requests", {withCredentials:true});
             console.log(res);
             dispatch(addRequest(res.data.data))
         }
@@ -46,7 +46,7 @@ const Requests = () => {
            
          
            {requests.map((request)=>{
-                const {_id, firstName, lastName, gender, about, photoUrl}=request.fromUserId;
+                const {_id, firstName, gender, about, photoUrl}=request.fromUserId;
                 return(
                     <div key={_id} className="flex justify-between w-2/3 bg-base-300 m-2 gap-5 py-3 rounded-lg items-center">
                         <div className="flex items-center">
@@ -54,7 +54,7 @@ const Requests = () => {
                             <img src={photoUrl} alt="Photo" className="w-20 h-20 rounded-full m-4"/>
                         </div>
                         <div className="ml-3">
-                     <p className='font-bold text-lg'>{firstName+ " "+ lastName}</p>
+                     <p className='font-bold text-lg'>{firstName}</p>
                      <p>Gender: {gender}</p>
                      <p>{about}</p>
                         </div>
@@ -70,9 +70,7 @@ const Requests = () => {
                 )
             })}
 
-        
-    
-        
+
         </div>
       )
     }

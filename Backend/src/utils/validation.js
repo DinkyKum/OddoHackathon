@@ -1,9 +1,9 @@
 const validator=require('validator');
 
 const validateSignupData=(req)=>{
-    const {firstName, lastName, emailId, password}=req.body;
+    const {name, emailId, password}=req.body;
 
-    if(!(firstName || lastName)){
+    if(!(name)){
         throw new Error("Invalid Name");
     }
 
@@ -17,7 +17,7 @@ const validateSignupData=(req)=>{
 }
 
 const validateEditData=(req)=>{
-    const editableFields= ["firstName", "lastName", "gender", "age", "photoUrl", "skills", "about"];
+    const editableFields= ["name", "gender", "photoUrl", "skills", "about", "location", "skillsWanted", "skillsOffered", "availabilityDays", "availabilityTimes", "visibility"];
 
     const isEditableField= Object.keys(req.body).every((k)=>editableFields.includes(k));
 

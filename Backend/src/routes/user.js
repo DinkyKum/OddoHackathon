@@ -75,4 +75,6 @@ userRouter.get('/user/feed', userAuth, async(req, res)=>{
     }
 })
 
+
+
 module.exports=userRouter

@@ -144,7 +144,7 @@ const EditProfile = ({ user }) => {
           </div>
         </div>
 
-        <div className="flex gap-6 mt-5">
+        <div className="flex gap-20 mt-5">
           <div className="flex items-center w-1/2">
             <label className={labelClass}>Availability (Days)</label>
             <select className={inputClass} value={availabilityDays} onChange={(e) => setAvailabilityDays(e.target.value)}>

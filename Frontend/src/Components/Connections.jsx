@@ -35,21 +35,29 @@ const connections = () => {
         <h1 className="text-3xl font-bold m-5"> Connections </h1>
        
      
-       {connections.map((connection)=>{
-            const {_id, firstName, lastName, gender, about, photoUrl}=connection;
-            return(
-                <div className="flex items-center w-1/2 bg-base-300 m-2 gap-7 py-2">
-                    <div>
-                        <img src={photoUrl} alt="Photo" className="w-20 h-20 rounded-full ml-3"/>
-                    </div>
-                    <div>
-                 <p className='font-bold text-lg'>{firstName+ " "+ lastName}</p>
-                 <p>Gender: {gender}</p>
-                 <p>{about}</p>
-                    </div>
-                </div>
-            )
-        })}
+    {connections.map((connection) => {
+  const { _id, name, gender, about, photoUrl } = connection;
+  return (
+    <div
+      key={_id}
+      className="flex items-center w-1/2 bg-base-300 m-2 gap-7 p-5 rounded-lg shadow-md"
+    >
+      <div>
+        <img
+          src={photoUrl}
+          alt="Photo"
+          className="w-20 h-20 rounded-full ml-3 object-cover"
+        />
+      </div>
+      <div>
+        <p className="font-bold text-lg">{name}</p>
+        <p>Gender: {gender}</p>
+        <p>{about}</p>
+      </div>
+    </div>
+  );
+})}
+
     
 
         

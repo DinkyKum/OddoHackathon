@@ -104,7 +104,7 @@ const userSchema= new mongoose.Schema({
     },
 
     timeAvailability:{
-        type: [String],
+        type: String,
         enum: ["morning", "afternoon", "evening", "night"],
     },
 

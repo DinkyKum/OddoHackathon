@@ -88,7 +88,7 @@ const EditProfile = ({ user }) => {
               <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} className={inputClass} />
             </div>
             <div className="flex items-center mb-5">
-              <label className={labelClass}>Gender</label>
+              <label className={labelClass}>Gender(M/F)</label>
               <input type="text" value={gender} onChange={(e) => setGender(e.target.value)} className={inputClass} />
             </div>
           </div>

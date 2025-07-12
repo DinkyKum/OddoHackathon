@@ -34,7 +34,7 @@ const UserCard = ({ user }) => {
 
         {/* Skills Offered */}
         <div className="mb-2">
-          <span className="text-green-400 font-medium">Skills Offered =&gt;</span>
+          <span className="text-green-400 font-medium">Skills Offered</span>
           <div className="mt-1 flex flex-wrap gap-3">
             {user.skillsOffered?.map((skill, idx) => (
               <span key={idx} className="border-[2px] border-white rounded-full px-4 py-1 text-sm">
@@ -46,7 +46,7 @@ const UserCard = ({ user }) => {
 
         {/* Skills Wanted */}
         <div className="mt-3">
-          <span className="text-blue-400 font-medium">Skill wanted =&gt;</span>
+          <span className="text-blue-400 font-medium">Skill wanted</span>
           <div className="mt-1 flex flex-wrap gap-3">
             {user.skillsWanted?.map((skill, idx) => (
               <span key={idx} className="border-[2px] border-white rounded-full px-4 py-1 text-sm">

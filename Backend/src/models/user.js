@@ -111,6 +111,7 @@ const userSchema= new mongoose.Schema({
   visibility: {
   type: String,
   lowercase: true,
+  default: "public",
   enum: ["public", "private"],
   validate(value) {
     if (!["public", "private"].includes(value)) {

@@ -16,7 +16,7 @@ requestRouter.post('/request/send/:status/:toUserId', userAuth, async (req, res)
         return res.status(404).send("User doesnt exists");
     }
 
-    const validStatus=["ignored", "interested"]
+    const validStatus=["pending"]
 
     const isStatusValid= validStatus.includes(status);
     if(!isStatusValid){
@@ -58,7 +58,7 @@ requestRouter.post('/request/review/:status/:reqId', userAuth, async (req, res)=
 
     const connectionRequest= await ConnectionRequest.findOne({
         toUserId: loggedInUser._id,
-        status:"interested",
+        status:"pending",
         _id:reqId
     })
 

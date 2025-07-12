@@ -5,12 +5,12 @@ const ConnectionRequest= require('../models/connectionRequest');
 const User=require('../models/user')
 
 
-const USER_SAFE_DATA = "firstName age gender age skills about photoUrl";
+const USER_SAFE_DATA = "name age gender age skills about photoUrl";
 
 userRouter.get('/user/request/received', userAuth, async (req, res)=>{
    try{ const connectionRequests= await ConnectionRequest.find({
         toUserId:req.user._id,
-        status:"interested"
+        status:"pending"
     }).populate("fromUserId", ["name", "age", "gender", "skills", "about", "photoUrl"])
 
     res.json({data: connectionRequests})
@@ -115,7 +115,33 @@ userRouter.get("/users", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
+// Get a single user by ID
+userRouter.get("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 
+// DELETE /users/:id — Delete user by ID
+userRouter.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully", user: deletedUser });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 
 
 module.exports=userRouter

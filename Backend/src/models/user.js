@@ -4,15 +4,19 @@ const jwt=require('jsonwebtoken');
 const bcrypt= require('bcrypt');
 
 const userSchema= new mongoose.Schema({
-    firstName:{ 
+    name:{ 
         type: String,
         required: true,
         minLength: 3,
     },
 
-    lastName:{
+    // lastName:{
+    //     type: String,
+    //     maxLength: 50
+    // },
+
+    location:{
         type: String,
-        maxLength: 50
     },
 
     emailId:{
@@ -70,9 +74,50 @@ const userSchema= new mongoose.Schema({
         default: "This is the default about data"
     },
 
-    skills:{
-        type:[String]
+    skillsWanted:{
+        type:[String],
+        lowercase: true,
     },
+
+    skillsOffered:{
+        type:[String],
+        lowercase: true,
+    },
+    rating:{
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
+    },
+    isSpam:{
+        type: Boolean,
+        default: false
+    },
+    isBanned:{
+        type: Boolean,
+        default: false
+    },
+
+    availability:{
+        type: String,
+        enum: ["weekdays", "weekends", "full time"],
+    },
+
+    timeAvailability:{
+        type: [String],
+        enum: ["morning", "afternoon", "evening", "night"],
+    },
+
+  visibility: {
+  type: String,
+  lowercase: true,
+  enum: ["public", "private"],
+  validate(value) {
+    if (!["public", "private"].includes(value)) {
+      throw new Error("Visibility must be 'public' or 'private'");
+    }
+  }
+}
 },
 
 {

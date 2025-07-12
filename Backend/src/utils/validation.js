@@ -17,7 +17,7 @@ const validateSignupData=(req)=>{
 }
 
 const validateEditData=(req)=>{
-    const editableFields= ["firstName", "lastName", "gender", "age", "photoUrl", "skills", "about"];
+    const editableFields= ["name", "gender", "photoUrl", "skills", "about", "location", "skillsWanted", "skillsOffered", "availabilityDays", "availabilityTimes", "visibility"];
 
     const isEditableField= Object.keys(req.body).every((k)=>editableFields.includes(k));
 

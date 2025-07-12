@@ -1,9 +1,9 @@
 const validator=require('validator');
 
 const validateSignupData=(req)=>{
-    const {firstName, lastName, emailId, password}=req.body;
+    const {name, emailId, password}=req.body;
 
-    if(!(firstName || lastName)){
+    if(!(name)){
         throw new Error("Invalid Name");
     }
 

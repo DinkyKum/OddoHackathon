@@ -5,13 +5,13 @@ const ConnectionRequest= require('../models/connectionRequest');
 const User=require('../models/user')
 
 
-const USER_SAFE_DATA = "firstName lastName age gender age skills about photoUrl";
+const USER_SAFE_DATA = "firstName age gender age skills about photoUrl";
 
 userRouter.get('/user/request/received', userAuth, async (req, res)=>{
    try{ const connectionRequests= await ConnectionRequest.find({
         toUserId:req.user._id,
         status:"interested"
-    }).populate("fromUserId", ["firstName", "lastName", "age", "gender", "skills", "about", "photoUrl"])
+    }).populate("fromUserId", ["name", "age", "gender", "skills", "about", "photoUrl"])
 
     res.json({data: connectionRequests})
 }
@@ -20,6 +20,32 @@ catch(err){
 
 }
 })
+
+userRouter.get('/user/requests', userAuth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Received requests (i.e., someone sent a request to this user)
+    const receivedRequests = await ConnectionRequest.find({
+      toUserId: userId
+    }).populate("fromUserId", ["name", "age", "gender", "skills", "about", "photoUrl"]);
+
+    // Sent requests (i.e., this user sent a request to someone)
+    const sentRequests = await ConnectionRequest.find({
+      fromUserId: userId
+    }).populate("toUserId", ["name", "age", "gender", "skills", "about", "photoUrl"]);
+
+    res.json({
+      received: receivedRequests,
+      sent: sentRequests
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching connection requests: " + err.message);
+  }
+});
+
 
 userRouter.get('/user/connections', userAuth, async(req, res)=>{
    
@@ -76,6 +102,19 @@ userRouter.get('/user/feed', userAuth, async (req, res) => {
   }
 });
 
+
+
+
+
+// GET all users
+userRouter.get("/users", async (req, res) => {
+  try {
+    const users = await User.find().select("-password"); // hide password
+    res.status(200).json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+});
 
 
 

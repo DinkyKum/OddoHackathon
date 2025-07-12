@@ -10,7 +10,6 @@ require('dotenv').config()
 
 // require('./utils/cronjob');
 
-
 const connectDB=require("./config/database")
 const cookieParser=require('cookie-parser');
 const cors=require('cors')
@@ -18,8 +17,8 @@ const cors=require('cors')
 const authRouter = require('./routes/auth');
 const profileRouter= require('./routes/profile');
 const requestRouter= require('./routes/request');
-const userRouter=require('./routes/user')
-
+const userRouter=require('./routes/user');
+const adminRouter = require('./routes/admin');  
 const port=process.env.PORT;
 
 app.use(express.json())
@@ -84,7 +83,8 @@ if (isVercel) {
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
-app.use('/', userRouter)
+app.use('/', userRouter);
+app.use('/admin', adminRouter);
 
 
 

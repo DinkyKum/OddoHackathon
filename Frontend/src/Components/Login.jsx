@@ -8,8 +8,8 @@ import { BASE_URL } from '../utils/constants';
 const Login = () => {
   const [emailId, setEmailId] = useState("Dinky@gmail.com");
   const [password, setPassword] = useState("Dinky@123");
-  const [firstName, setFirstName]=useState("");
-  const [lastName, setLastName]=useState("");
+  const [name, setName]=useState("");
+  // const [lastName, setLastName]=useState("");
   const [isLogin, setIsLogin]=useState(true);
   const [error, setError]=useState("");
 
@@ -31,7 +31,7 @@ const Login = () => {
 
   const HandleSignUp=async ()=>{
     try{
-      const res= await axios.post(BASE_URL+ "/signup", {firstName, lastName, emailId, password}, {withCredentials:true});
+      const res= await axios.post(BASE_URL+ "/signup", {name, emailId, password}, {withCredentials:true});
       dispatch(addUser(res.data.data));
       navigate('/profile')
 
@@ -53,14 +53,14 @@ const Login = () => {
     {!isLogin && (
       <>
     <div className="label">
-    <span className="label-text">First Name </span>
+    <span className="label-text">Name </span>
   </div>
-  <input type="text" value={firstName} onChange={(e)=> setFirstName(e.target.value)} placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+  <input type="text" value={name} onChange={(e)=> setName(e.target.value)} placeholder="Type here" className="input input-bordered w-full max-w-xs" />
 
-  <div className="label">
+  {/* <div className="label">
     <span className="label-text">Last Name</span>
-  </div>
-  <input type="text" value={lastName} onChange={(e)=> setLastName(e.target.value)} placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+  </div> */}
+  {/* <input type="text" value={lastName} onChange={(e)=> setLastName(e.target.value)} placeholder="Type here" className="input input-bordered w-full max-w-xs" /> */}
   </>)}
 
   <div className="label">

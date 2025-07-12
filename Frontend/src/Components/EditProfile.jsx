@@ -52,8 +52,8 @@ const EditProfile = ({ user }) => {
           location,
           skillsWanted: skillsWantedList,
           skillsOffered: skillsOfferedList,
-          availabilityDays,
-          availabilityTimes,
+          availability: availabilityDays.toLowerCase(),
+          timeAvailability: availabilityTimes.toLowerCase(),
           visibility: visibility.toLowerCase(),
         },
         { withCredentials: true }

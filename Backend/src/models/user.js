@@ -104,13 +104,14 @@ const userSchema= new mongoose.Schema({
     },
 
     timeAvailability:{
-        type: [String],
+        type: String,
         enum: ["morning", "afternoon", "evening", "night"],
     },
 
   visibility: {
   type: String,
   lowercase: true,
+  default: "public",
   enum: ["public", "private"],
   validate(value) {
     if (!["public", "private"].includes(value)) {

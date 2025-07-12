@@ -75,4 +75,17 @@ userRouter.get('/user/feed', userAuth, async(req, res)=>{
     }
 })
 
+
+// GET all users
+userRouter.get("/users", async (req, res) => {
+  try {
+    const users = await User.find().select("-password"); // hide password
+    res.status(200).json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+});
+
+
+
 module.exports=userRouter

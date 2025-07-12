@@ -26,7 +26,7 @@ app.use(cookieParser())
 
 const isVercel = !!process.env.VERCEL; 
 
-const allowedOrigins = ["http://localhost:5173", "https://devconnect-omega.vercel.app"];
+const allowedOrigins = ["http://localhost:5174", "http://localhost:5173", "https://oddo-hackathon.vercel.app"];
 
 app.use(
   cors({

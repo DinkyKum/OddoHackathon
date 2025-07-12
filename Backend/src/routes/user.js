@@ -70,36 +70,38 @@ userRouter.get('/user/connections', userAuth, async(req, res)=>{
     }
 })
 
-userRouter.get('/user/feed', userAuth, async(req, res)=>{
-    try{
-        let limit= req.query.limit || 10;
-        limit= limit>50 ? 50:limit;
+userRouter.get('/user/feed', userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
 
-        const page= req.query.page || 1;
-        const skip= (page-1)*limit;
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [
+        { toUserId: loggedInUser._id },
+        { fromUserId: loggedInUser._id }
+      ]
+    }).select("toUserId fromUserId");
 
+    const notToDisplayInFeed = new Set();
 
-        const loggedInUser=req.user;
-        const connectionRequests=await ConnectionRequest.find({
-            $or:[{toUserId:loggedInUser._id}, {fromUserId:loggedInUser._id}]
-        }).select("toUserId fromUserId")
+    connectionRequests.forEach((req) => {
+      notToDisplayInFeed.add(req.fromUserId.toString());
+      notToDisplayInFeed.add(req.toUserId.toString());
+    });
 
-        const notToDisplayInFeed= new Set();
+    // ✅ Removed pagination — returns all filtered users
+    const feed = await User.find({
+      $and: [
+        { _id: { $nin: Array.from(notToDisplayInFeed) } },
+        { _id: { $ne: loggedInUser._id } }
+      ]
+    });
 
-        connectionRequests.forEach((k)=> {
-            notToDisplayInFeed.add(k.fromUserId.toString())
-            notToDisplayInFeed.add(k.toUserId.toString())
-        });
+    res.send(feed);
+  } catch (err) {
+    res.status(400).send("There is some error: " + err);
+  }
+});
 
-        const feed= await User.find({$and:[{ _id: {$nin:Array.from(notToDisplayInFeed)}}, {_id:{$ne:loggedInUser._id}}]}).limit(limit).skip(skip);
-
-        res.send(feed);
-
-    }
-    catch(err){
-        res.status(400).send("There is some err"+ err);
-    }
-})
 
 
 

@@ -73,6 +73,16 @@ const userSchema= new mongoose.Schema({
     skills:{
         type:[String]
     },
+    visibility: {
+  type: String,
+  lowercase: true,
+  enum: ["public", "private"],
+  validate(value) {
+    if (!["public", "private"].includes(value)) {
+      throw new Error("Visibility must be 'public' or 'private'");
+    }
+  }
+}
 },
 
 {

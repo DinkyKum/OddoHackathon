@@ -29,6 +29,7 @@ profileRouter.put('/profile/edit', userAuth, async(req, res)=>{
     res.send("User Updated Succesfully" + loggedInUser);
 }
     catch(err){
+        console.log(err);
         res.status(400).send("There is some error"+ err);
     }
 })

@@ -33,9 +33,30 @@ const courseSchema= new mongoose.Schema({
         enum:["pending", "accepted", "rejected"],
     },
 
+    // Track if teacher has accepted (for pay courses, payment still needed)
+    teacherAccepted:{
+        type:Boolean,
+        default: false
+    },
+
     alliedCourse:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Course"
+    },
+    
+    // Payment fields for pay courses
+    paymentStatus:{
+        type:String,
+        enum:["pending", "paid", "failed"],
+        default: "pending"
+    },
+    
+    transactionHash:{
+        type:String,
+    },
+    
+    paymentWalletAddress:{
+        type:String,
     },
 },
 

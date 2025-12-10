@@ -18,6 +18,7 @@ const authRouter = require('./routes/auth');
 const profileRouter= require('./routes/profile');
 const requestRouter= require('./routes/request');
 const userRouter=require('./routes/user');
+const courseRouter=require('./routes/course');
 const adminRouter = require('./routes/admin');  
 const port=process.env.PORT;
 
@@ -26,7 +27,7 @@ app.use(cookieParser())
 
 const isVercel = !!process.env.VERCEL; 
 
-const allowedOrigins = ["http://localhost:5173", "https://devconnect-omega.vercel.app"];
+const allowedOrigins = ["http://localhost:5174", "http://localhost:5173", "https://oddo-hackathon.vercel.app"];
 
 app.use(
   cors({
@@ -84,6 +85,7 @@ app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
 app.use('/', userRouter);
+app.use('/', courseRouter);
 app.use('/admin', adminRouter);
 
 

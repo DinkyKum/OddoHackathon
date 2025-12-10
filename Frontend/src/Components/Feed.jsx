@@ -11,8 +11,8 @@ const Feed = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filter states
+  const [availabilityFilter, setAvailabilityFilter] = useState('');
   const [timeAvailabilityFilter, setTimeAvailabilityFilter] = useState('');
-  const [dayAvailabilityFilter, setDayAvailabilityFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const cardsPerPage = 3;
@@ -35,12 +35,12 @@ const Feed = () => {
   const publicFeed = (feed || []).filter(user => user.visibility === 'public');
 
   const filteredFeed = publicFeed.filter(user => {
-    const matchesTimeAvailability = timeAvailabilityFilter
-      ? user.timeAvailability === timeAvailabilityFilter
+    const matchesAvailability = availabilityFilter
+      ? user.availability === availabilityFilter
       : true;
 
-    const matchesDayAvailability = dayAvailabilityFilter
-      ? user.dayAvailability?.includes(dayAvailabilityFilter)
+    const matchesTimeAvailability = timeAvailabilityFilter
+      ? user.timeAvailability?.includes(timeAvailabilityFilter)
       : true;
 
     const matchesSearch = searchTerm.trim() === ''
@@ -49,7 +49,7 @@ const Feed = () => {
         user.skills?.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
         user.about?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesTimeAvailability && matchesDayAvailability && matchesSearch;
+    return matchesAvailability && matchesTimeAvailability && matchesSearch;
   });
 
   const totalPages = Math.ceil(filteredFeed.length / cardsPerPage);
@@ -69,13 +69,13 @@ const Feed = () => {
     setCurrentPage(1);
   };
 
-  const handleTimeChange = (e) => {
-    setTimeAvailabilityFilter(e.target.value);
+  const handleAvailabilityChange = (e) => {
+    setAvailabilityFilter(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleDayChange = (e) => {
-    setDayAvailabilityFilter(e.target.value);
+  const handleTimeAvailabilityChange = (e) => {
+    setTimeAvailabilityFilter(e.target.value);
     setCurrentPage(1);
   };
 
@@ -84,39 +84,39 @@ const Feed = () => {
       
       {/* Filters Bar */}
       <div className="flex flex-wrap justify-center gap-3 mb-4">
-        {/* Time Availability Dropdown */}
+        {/* Availability (weekdays/weekends/full time) */}
         <select
-          value={timeAvailabilityFilter}
-          onChange={handleTimeChange}
-          className="px-4 py-1 rounded bg-base-200  text-white border border-white"
+          value={availabilityFilter}
+          onChange={handleAvailabilityChange}
+          className="px-4 py-1 rounded bg-base-200 text-white border border-white"
         >
-          <option value="">Time Availability</option>
+          <option value="">Availability</option>
           <option value="weekdays">Weekdays</option>
           <option value="weekends">Weekends</option>
           <option value="full time">Full Time</option>
         </select>
 
-        {/* Day Availability Dropdown */}
+        {/* Time Availability (morning/evening/etc) */}
         <select
-          value={dayAvailabilityFilter}
-          onChange={handleDayChange}
-          className="px-4 py-1 rounded bg-base-200  text-white border border-white"
+          value={timeAvailabilityFilter}
+          onChange={handleTimeAvailabilityChange}
+          className="px-4 py-1 rounded bg-base-200 text-white border border-white"
         >
-          <option value="">Day Availability</option>
+          <option value="">Time Availability</option>
           <option value="morning">Morning</option>
           <option value="afternoon">Afternoon</option>
           <option value="evening">Evening</option>
           <option value="night">Night</option>
         </select>
 
-        {/* Search Input */}
+        {/* Search */}
         <div className="flex">
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={handleSearchChange}
-            className="px-4 py-1 rounded-l bg-[#1f1f1f] text-white border border-white outline-none"
+            className="px-4 py-1 rounded-l bg-base-200 text-white border border-white outline-none"
           />
           <button className="px-3 py-1 bg-white text-black font-semibold rounded-r cursor-default">
             Search
@@ -138,7 +138,7 @@ const Feed = () => {
         ))}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       {filteredFeed.length > 0 && (
         <div className="mt-6 flex gap-2">
           <button

@@ -50,6 +50,8 @@ const Navbar = () => {
        </li>
        <li><Link to='/connections'>Connections</Link></li>
        <li><Link to='/requests'>Requests</Link></li>
+       <li><Link to='/course-requests'>Course Requests</Link></li>
+       <li><Link to='/my-courses'>My Courses</Link></li>
        <li><Link to='/'>Feed</Link></li>
        <li><Link onClick={HandleLogout}>Logout</Link></li>
        

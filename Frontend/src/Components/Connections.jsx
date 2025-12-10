@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { addConnection } from "../utils/connectionSlice";
 
 const Connections = () => {
   const dispatch = useDispatch();
   const connections = useSelector((store) => store.connection);
+  const navigate = useNavigate();
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
@@ -62,12 +64,26 @@ const Connections = () => {
         withCredentials: true,
       });
 
-      alert("Course created successfully!");
-      closePopup();
+      if (type === "pay") {
+        // For pay courses, course is created but teacher needs to accept first
+        // Student will see it in My Courses and pay after teacher accepts
+        alert("Course request sent! Please wait for the teacher to accept. You'll be able to make payment once they accept.");
+        closePopup();
+      } else {
+        // For swap courses, course is created but teacher needs to accept first
+        // Student will see it in My Courses and can access it after teacher accepts
+        alert("Swap course request sent! Please wait for the teacher to accept. You'll be able to start learning once they accept.");
+        closePopup();
+      }
     } catch (err) {
       console.log(err);
-      alert("Error: " + err.response?.data);
+      alert("Error: " + (err.response?.data || err.message));
     }
+  };
+
+  const handlePaymentClose = () => {
+    setShowPaymentModal(false);
+    setCreatedCourse(null);
   };
 
   return (
